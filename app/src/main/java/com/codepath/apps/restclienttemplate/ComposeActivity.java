@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -24,6 +27,7 @@ public class ComposeActivity extends AppCompatActivity {
     public static final int MAX_TWEET_LENGTH = 140;
     EditText etCompose;
     Button btnTweet;
+    TextView txtView;
 
     TwitterClient client;
 
@@ -36,6 +40,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
+        txtView = findViewById(R.id.txtView);
 
         // Set click listener on the button
         btnTweet.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +80,27 @@ public class ComposeActivity extends AppCompatActivity {
                         Log.e(TAG, "onFailure to publish tweet", throwable);
                     }
                 });
+            }
+        });
+
+        etCompose.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Fires right before text is changing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Fires right as the text is being changed (even supplies the range of text)
+                String text = etCompose.getText().toString();
+                int count = text.length();
+                txtView.setText(count + "/280");
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Fires right after the text has changed
             }
         });
     }
